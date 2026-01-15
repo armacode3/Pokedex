@@ -13,12 +13,12 @@ export function cleanInput(input: string): string[] {
     return words.filter(Boolean);
 }
 
-export function startREPL(state: State) {
+export async function startREPL(state: State) {
     const promptString = "Pokedex > ";
     state.rl.setPrompt(promptString);
     state.rl.prompt();
 
-    state.rl.on("line", (input) => {
+    state.rl.on("line", async (input) => {
         const inputs = cleanInput(input);
         if (inputs.length === 0) {
             state.rl.prompt();
@@ -32,7 +32,11 @@ export function startREPL(state: State) {
             console.log("Unknown command");
             state.rl.prompt();
         } else {
-            cmd.callback(state);
+            try {
+                await cmd.callback(state);
+            } catch (error) {
+                console.error("Command error:", error);
+            }
         }
     });
 }

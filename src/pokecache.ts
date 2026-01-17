@@ -38,7 +38,7 @@ export class Cache {
 
     get<T>(key: string) {
         if (this.#cache.has(key)) {
-            return this.#cache.get(key);
+            return this.#cache.get(key)?.val;
         }
         return undefined;
     }

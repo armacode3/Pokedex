@@ -25,7 +25,8 @@ export async function startREPL(state: State) {
             return;
         }
 
-        const commandName = inputs[0];
+        const [commandName, ...args] = inputs;
+
         const cmd = state.commands[commandName];
 
         if (!cmd) {
@@ -33,7 +34,7 @@ export async function startREPL(state: State) {
             state.rl.prompt();
         } else {
             try {
-                await cmd.callback(state);
+                await cmd.callback(state, ...args);
             } catch (error) {
                 console.error("Command error:", error);
             }
